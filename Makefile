@@ -3,19 +3,19 @@ export PROJECT_ROOT := $(shell pwd)
 include .env
 export
 
-up: ## Start PostgreSQL
+up: 
 	@docker compose up -d todoapp-postgres
 
-down: ## Stop and remove Compose containers, keeping database files
+down:
 	@docker compose down
 
-migrate: ## Run migrations (ACTION="up 1", ACTION="down 2", etc.)
+migrate:
 	@docker compose run --rm todoapp-postgres-migrate \
 	  -path /migrations \
 	  -database="postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@todoapp-postgres:5432/$(POSTGRES_DB)?sslmode=disable&search_path=public" \
 	  $(ACTION)
 
-migrate-create: ## Create migration files (NAME=create_something)
+migrate-create: 
 	@if [ -n "$(NAME)" ]; then \
 	  docker compose run --rm todoapp-postgres-migrate \
 	    create \
@@ -27,7 +27,7 @@ migrate-create: ## Create migration files (NAME=create_something)
 	  exit 1; \
 	fi
 
-clean: ## Stop PostgreSQL and delete only its database files
+clean: 
 	@read -p 'Permanently delete database files in out/pgdata? [y/N] ' answer; \
 	  if [ "$$answer" = y ]; then \
 	    docker compose down && \
